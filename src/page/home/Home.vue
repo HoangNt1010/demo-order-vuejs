@@ -4,8 +4,9 @@
     <div class="row">
       <div class="col-6">
         <div class="form-group">
-          <label for="exampleFormControlInput1">Số Người:</label>
+          <label for="exampleFormControlInput1">Số Người: *</label>
           <input
+          type="number"
             v-model="form.amount"
             class="form-control"
             id="exampleFormControlInput1"
@@ -14,7 +15,7 @@
         </div>
         <div>
           <label for="exampleFormControlInput1">
-            Buổi:
+            Buổi: *
             <small class="form-text text-muted">Đặt buổi sáng hoặc buổi trưa được giảm 10%.</small>
           </label>
           <br />
@@ -24,7 +25,7 @@
             type="radio"
             name="exampleRadios"
             id="exampleRadios1"
-            value="morning"
+            value="sáng"
             checked
           />
           <label class="form-check-label m-3" for="morning">Sáng</label>
@@ -34,7 +35,7 @@
             type="radio"
             name="exampleRadios"
             id="exampleRadios2"
-            value="afternoon"
+            value="trưa"
           />
           <label class="form-check-label m-3" for="afternoon">Trưa</label>
           <input
@@ -43,18 +44,18 @@
             type="radio"
             name="exampleRadios"
             id="exampleRadios3"
-            value="evening"
+            value="tối"
           />
           <label class="form-check-label m-3" for="evening">Tối</label>
         </div>
         <div class="form-group">
-          <label for="exampleFormControlSelect1">Nơi tổ chức:</label>
+          <label for="exampleFormControlSelect1">Nơi tổ chức: *</label>
           <select class="form-control" id="exampleFormControlSelect1" v-model="form.place">
             <option v-for="(pl,index) in place" :key="index" :value="pl.value">{{pl.text}}</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="exampleFormControlInput2">Tên khách hàng:</label>
+          <label for="exampleFormControlInput2">Tên khách hàng: *</label>
           <input
             class="form-control"
             id="exampleFormControlInput2"
@@ -63,7 +64,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="exampleFormControlSelect2">Giới tính:</label>
+          <label for="exampleFormControlSelect2">Giới tính: *</label>
           <select class="form-control" id="exampleFormControlSelect2" v-model="form.gender">
             <option v-for="(sex,index) in gender" :key="index" :value="sex.value">{{sex.text}}</option>
           </select>
@@ -71,7 +72,7 @@
       </div>
       <div class="col-6">
         <div class="form-group">
-          <label for="exampleFormControlInput3">Địa điểm tổ chức:</label>
+          <label for="exampleFormControlInput3">Địa điểm tổ chức: *</label>
           <input
             class="form-control"
             id="exampleFormControlInput3"
@@ -80,7 +81,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="example-date-input">Date</label>
+          <label for="example-date-input">Date: *</label>
           <input
             class="form-control"
             type="date"
@@ -90,7 +91,7 @@
           />
         </div>
         <div class="form-group">
-          <label for="exampleFormControlTextarea1">Yêu cầu của khách hàng:</label>
+          <label for="exampleFormControlTextarea1">Yêu cầu của khách hàng: *</label>
           <textarea
             placeholder="Bạn có yêu cầu gì không?"
             class="form-control"
@@ -110,6 +111,12 @@
             <option v-for="(item,index) in ads" :key="index" :value="item.value">{{item.text}}</option>
           </select>
         </div>
+        <div class="form-group">
+          <input type="text" list="food" v-model="form.food" />
+          <datalist id="food">
+            <option v-for="(item,index) in listFood" :key="index">{{item}}</option>
+          </datalist>
+        </div>
       </div>
     </div>
     <button type="button" class="btn btn-primary" @click="order">Đặt bàn</button>
@@ -122,48 +129,44 @@ export default {
   data() {
     return {
       form: {
+        id: 0,
         amount: "",
         time: "",
-        place: "home",
+        place: "Trong nhà",
         name: "",
-        gender: "male",
+        gender: "Nam",
         address: "",
         date: "",
         description: "",
-        ads: "facebook",
-        totalPrice: 0
+        ads: "Facebook",
+        totalPrice: 0,
+        food: ""
       },
       place: [
-        { text: "Trong nhà", value: "home" },
-        { text: "Ngoài trời", value: "outside" }
+        { text: "Trong nhà", value: "Trong nhà" },
+        { text: "Ngoài trời", value: "Ngoài trời" }
       ],
       gender: [
-        { text: "Nam", value: "male" },
-        { text: "Nữ", value: "female" }
+        { text: "Nam", value: "Nam" },
+        { text: "Nữ", value: "Nữ" }
       ],
       ads: [
-        { text: "Facebook", value: "facebook" },
-        { text: "Quảng cáo", value: "ads" },
-        { text: "Bạn bè", value: "friend" }
-      ]
+        { text: "Facebook", value: "Facebook" },
+        { text: "Quảng cáo", value: "Quảng cáo" },
+        { text: "Bạn bè", value: "Bạn bè" }
+      ],
+      listFood: ["tôm", "cua", "cá"]
     };
   },
   methods: {
     order() {
-      // this.$store.dispatch('totalPrice', this.form)
-      // console.log(this.form);
-      this.$store.dispatch('totalPrice', this.form)
-      this.$router.push('/order')
-    },
-    resetForm() {
-      (this.form.amount = ""),
-        (this.form.time = ""),
-        (this.form.place = ""),
-        (this.form.name = ""),
-        (this.form.address = ""),
-        (this.form.date = ""),
-        (this.form.description = ""),
-        (this.form.ads = "");
+      if(this.form.amount === '' || this.form.time === '' || this.form.place === '' || this.form.name === '' || this.form.gender === '' || this.form.address === '' || this.form.date === '' || this.form.description === '') {
+        alert('Bạn hãy nhập đủ thông tin')
+      } else {
+      this.form.id =   this.$store.state.data.length + 1
+      this.$store.dispatch("totalPrice", this.form);
+      this.$router.push("/order");
+      }
     }
   }
 };

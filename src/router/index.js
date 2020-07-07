@@ -4,6 +4,8 @@ import Login from '../page/login/Login'
 import Register from '../page/register/Register'
 import Home from '../page/home/Home'
 import Order from '../page/order/Order'
+import Edit from '../page/editOrder/Edit'
+import NotFound from '../page/notFound/NotFound'
 
 Vue.use(Router)
 
@@ -35,6 +37,16 @@ const router = new Router({
       path: '/order',
       name: 'order',
       component: Order
+    },
+    {
+      path: '/edit/id',
+      name: 'edit',
+      component: Edit
+    },
+    {
+      path: '*',
+      name: 'notFound',
+      component: NotFound
     }
   ]
 });
@@ -68,7 +80,6 @@ router.beforeEach((to, from, next) => {
 });
 router.beforeEach((to, from, next) => {
   if (to.name == "order" && !Vue.$cookies.get("token")) {
-    // alert("hãy đăng nhập để sử dụng chức năng này");
     next({
       path: "/",
       query: {}
@@ -79,7 +90,6 @@ router.beforeEach((to, from, next) => {
 });
 router.beforeEach((to, from, next) => {
   if (to.name == "home" && !Vue.$cookies.get("token")) {
-    // alert("hãy đăng nhập để sử dụng chức năng này");
     next({
       path: "/",
       query: {}
